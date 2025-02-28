@@ -1,0 +1,167 @@
+{
+    "d": {
+      "yOffset": 0,
+      "desaturate": false,
+      "information": [],
+      "regionType": "icon",
+      "animation": {
+        "main": {
+          "type": "none",
+          "duration_type": "seconds",
+          "easeType": "none",
+          "easeStrength": 3
+        },
+        "start": {
+          "type": "none",
+          "duration_type": "seconds",
+          "easeType": "none",
+          "easeStrength": 3
+        },
+        "finish": {
+          "type": "none",
+          "duration_type": "seconds",
+          "easeType": "none",
+          "easeStrength": 3
+        }
+      },
+      "keepAspectRatio": false,
+      "selfPoint": "CENTER",
+      "cooldownEdge": false,
+      "iconSource": 0,
+      "xOffset": 0,
+      "authorOptions": [
+        {
+          "step": 1,
+          "width": 1,
+          "min": 0,
+          "key": "bloodlustVol",
+          "max": 100,
+          "type": "range",
+          "useDesc": false,
+          "name": "Bloodlust Music Volume",
+          "default": 75
+        }
+      ],
+      "cooldown": false,
+      "actions": {
+        "init": {
+          "custom": "local LSM = LibStub(\"LibSharedMedia-3.0\")\n\nlocal prefix = \"BloodlustMusicS2_\" -- Your prefix\naura_env.songs = {} -- Cached song list\n\n-- Build the song list ONCE when the WeakAura loads\nfor _, soundName in ipairs(LSM:List(\"sound\")) do\n    if string.sub(soundName, 1, #prefix) == prefix then\n        table.insert(aura_env.songs, soundName)\n    end\nend\n\nif #aura_env.songs == 0 then\n    print(\"No BloodlustMusicS2_ sounds found in SharedMedia!\")\nend\n",
+          "do_custom": true
+        },
+        "start": {
+          "do_message": false,
+          "do_sound": false,
+          "custom": "if #aura_env.songs == 0 then\n    print(\"No BloodlustMusicS2_ sounds available!\")\n    return\nend\n\n-- Store and modify sound settings within aura_env\naura_env.bloodlustOldVol = GetCVar(\"Sound_DialogVolume\")\nSetCVar(\"Sound_DialogVolume\", aura_env.config[\"bloodlustVol\"] / 100)\n\n-- Select a song at random based on time\nlocal songIndex = mod(floor(time() / 100), #aura_env.songs) + 1\nlocal selectedSong = aura_env.songs[songIndex]\n\n-- Fetch the full path from LSM and play the song\nlocal songPath = LibStub(\"LibSharedMedia-3.0\"):Fetch(\"sound\", selectedSong)\nif songPath then\n    _, aura_env.bloodlustSoundHandle = PlaySoundFile(songPath, \"Dialog\")\nelse\n    print(\"Error: Could not fetch path for selected song: \" .. selectedSong)\nend",
+          "sound_path": "interface/addons/BloodlustMusic - Season 2/songs/not-like-us.ogg",
+          "do_custom": true,
+          "sound": " custom",
+          "sound_channel": "Dialog",
+          "message": "starting",
+          "message_type": "PRINT"
+        },
+        "finish": {
+          "stop_sound": false,
+          "do_message": false,
+          "stop_sound_fade": 2,
+          "do_sound": false,
+          "custom": "StopSound(aura_env.bloodlustSoundHandle, 2000)\n\nC_Timer.After(2, function() -- Waits 2 seconds before restoring volume\n        SetCVar(\"Sound_DialogVolume\", aura_env.bloodlustOldVol)\nend)",
+          "do_sound_fade": false,
+          "do_custom": true,
+          "message": "stopping",
+          "message_type": "PRINT"
+        }
+      },
+      "tocversion": 110100,
+      "adjustedMin": "",
+      "width": 64,
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "useCooldownModRate": true,
+      "progressSource": [
+        -1,
+        ""
+      ],
+      "cooldownTextDisabled": false,
+      "internalVersion": 82,
+      "alpha": 0,
+      "useAdjustededMax": false,
+      "triggers": {
+        "1": {
+          "untrigger": [],
+          "trigger": {
+            "unit": "player",
+            "debuffType": "HELPFUL",
+            "spellIds": [],
+            "auraspellids": [
+              "80353",
+              "32182",
+              "2825",
+              "264667",
+              "146555",
+              "178207",
+              "256740",
+              "230935",
+              "309658",
+              "350249",
+              "368245",
+              "390386",
+              "381301",
+              "386540",
+              "441076",
+              "342242"
+            ],
+            "subeventPrefix": "SPELL",
+            "event": "Health",
+            "names": [],
+            "useExactSpellId": true,
+            "subeventSuffix": "_CAST_START",
+            "type": "aura2"
+          }
+        },
+        "activeTriggerMode": -10
+      },
+      "zoom": 0,
+      "uid": "B(BYomlVAbI",
+      "frameStrata": 1,
+      "icon": true,
+      "displayIcon": "Interface/AddOns/SharedMedia_BloodlustMusicS2/icons\\BloodlustMusicS2Icon.tga",
+      "conditions": [],
+      "config": {
+        "bloodlustVol": 100
+      },
+      "cooldownSwipe": true,
+      "height": 64,
+      "inverse": false,
+      "load": {
+        "talent": {
+          "multi": []
+        },
+        "spec": {
+          "multi": []
+        },
+        "size": {
+          "multi": []
+        },
+        "class": {
+          "multi": []
+        }
+      },
+      "subRegions": [
+        {
+          "type": "subbackground"
+        }
+      ],
+      "adjustedMax": "",
+      "anchorFrameType": "SCREEN",
+      "useAdjustededMin": false,
+      "anchorPoint": "CENTER",
+      "id": "Bloodlust Music: Folie à deux"
+    },
+    "m": "d",
+    "s": "5.19.3",
+    "v": 1421
+  }
